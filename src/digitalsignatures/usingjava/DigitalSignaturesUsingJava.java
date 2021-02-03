@@ -10,7 +10,7 @@ public class DigitalSignaturesUsingJava {
 //            System.out.println("Usage: GenSig nameOfFileToSign");
 //        }
 //        else
-            try {
+        try {
             /*Generate Public and Private Keys*/
             // Create a Key Pair Generator
             KeyPairGenerator keyGen = KeyPairGenerator.getInstance("DSA", "SUN");

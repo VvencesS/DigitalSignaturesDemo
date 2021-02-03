@@ -9,12 +9,7 @@ public class VerifyingADigitalSignature {
 
         /* Verify a DSA signature */
 
-//        if (args.length != 3) {
-//            System.out.println("Usage: VerSig " +
-//                    "publickeyfile signaturefile " + "datafile");
-//        }
-//        else
-            try {
+        try {
             /* Input and Convert the Encoded Public Key Bytes */
             FileInputStream keyfis = new FileInputStream("suepk");
             byte[] encKey = new byte[keyfis.available()];
