@@ -1,22 +1,15 @@
-package digitalsignatures.usingjava;
+package digitalsignatures.controller;
+
+import digitalsignatures.dao.SignedDocumentDAO;
+import digitalsignatures.db.ConnectDB;
+import digitalsignatures.model.SignedDocument;
+import digitalsignatures.service.Hash;
+import digitalsignatures.service.ObjectToXml;
 
 import java.io.*;
 import java.security.*;
 
 public class DigitalSignaturesUsingJava {
-    private static String checksum(String filepath, MessageDigest md) throws IOException {
-        // file hashing with DigestInputStream
-        try (DigestInputStream dis = new DigestInputStream(new FileInputStream(filepath), md)) {
-            while (dis.read() != -1) ; //empty loop to clear the data
-            md = dis.getMessageDigest();
-        }
-        // bytes to hex
-        StringBuilder result = new StringBuilder();
-        for (byte b : md.digest()) {
-            result.append(String.format("%02x", b));
-        }
-        return result.toString();
-    }
 
     public static void main(String[] args) {
         /* Generate a DSA signature */
@@ -45,18 +38,10 @@ public class DigitalSignaturesUsingJava {
             // Initialize the Signature Object
             dsa.initSign(priv);
 
-            // Supply the Signature Object the Data to Be Signed
-//            FileInputStream fis = new FileInputStream("data.txt");
-//
-//            BufferedInputStream bufin = new BufferedInputStream(fis);
-//            byte[] buffer = new byte[1024];
-//            int len;
-//            while ((len = bufin.read(buffer)) >= 0) {
-//                dsa.update(buffer, 0, len);
-//            };
-//            bufin.close();
+            // Chuyển từ Object sang Xml
+            ObjectToXml.execute();
             MessageDigest md = MessageDigest.getInstance("SHA-256"); //SHA, MD2, MD5, SHA-256, SHA-384...
-            String hex = checksum("./data.txt", md);
+            String hex = Hash.checksum("./wireTransfer103.xml", md);
             dsa.update(hex.getBytes());
 
             // Generate the Signature
@@ -64,6 +49,9 @@ public class DigitalSignaturesUsingJava {
 
             //Printing the signature
             System.out.println("Digital signature for given text: "+new String(realSig, "UTF8"));
+
+            // Thêm vào db
+            SignedDocumentDAO.InsertData(ConnectDB.CreateConnection(), new SignedDocument(1, realSig.toString()));
 
             /*Save the Signature and the Public Key in Files*/
             FileOutputStream sigfos = new FileOutputStream("sig");

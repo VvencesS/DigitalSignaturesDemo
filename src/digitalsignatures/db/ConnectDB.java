@@ -1,4 +1,4 @@
-package digitalsignatures;
+package digitalsignatures.db;
 
 import java.sql.*;
 
