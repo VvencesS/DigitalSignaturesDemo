@@ -3,12 +3,12 @@ package digitalsignatures.model;
 public class SignedDocument {
     private int id;
     private int document;
-    private String signate;
+    private byte[] signate;
 
     public SignedDocument() {
     }
 
-    public SignedDocument(int document, String signate) {
+    public SignedDocument(int document, byte[] signate) {
         this.document = document;
         this.signate = signate;
     }
@@ -29,11 +29,11 @@ public class SignedDocument {
         this.document = document;
     }
 
-    public String getSignate() {
+    public byte[] getSignate() {
         return signate;
     }
 
-    public void setSignate(String signate) {
+    public void setSignate(byte[] signate) {
         this.signate = signate;
     }
 }

@@ -20,7 +20,7 @@ public class SignedDocumentDAO {
 
             while(rs.next()) {
                 int document = rs.getInt("document");
-                String signature = rs.getString("signature");
+                byte[] signature = rs.getBytes("signature");
 
                 sd = new SignedDocument(document, signature);
             }
@@ -39,7 +39,7 @@ public class SignedDocumentDAO {
             PreparedStatement ptmt = conn.prepareStatement(sql);
 
             ptmt.setInt(1, sd.getDocument());
-            ptmt.setString(2, sd.getSignate());
+            ptmt.setBytes(2, sd.getSignate());
 
             int kt = ptmt.executeUpdate();
             if(kt != 0) {

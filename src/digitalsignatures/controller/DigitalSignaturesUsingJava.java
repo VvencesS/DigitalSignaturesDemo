@@ -13,10 +13,6 @@ public class DigitalSignaturesUsingJava {
 
     public static void main(String[] args) {
         /* Generate a DSA signature */
-//        if (args.length != 1) {
-//            System.out.println("Usage: GenSig nameOfFileToSign");
-//        }
-//        else
         try {
             /*Generate Public and Private Keys*/
             // Create a Key Pair Generator
@@ -38,20 +34,18 @@ public class DigitalSignaturesUsingJava {
             // Initialize the Signature Object
             dsa.initSign(priv);
 
-            // Chuyển từ Object sang Xml
-            ObjectToXml.execute();
-            MessageDigest md = MessageDigest.getInstance("SHA-256"); //SHA, MD2, MD5, SHA-256, SHA-384...
-            String hex = Hash.checksum("./wireTransfer103.xml", md);
+            // Chuyển từ Object sang Xml và hash xml đó
+            String hex = Hash.hashString(ObjectToXml.jaxbObjectToXML());
             dsa.update(hex.getBytes());
 
             // Generate the Signature
             byte[] realSig = dsa.sign();
 
             //Printing the signature
-            System.out.println("Digital signature for given text: "+new String(realSig, "UTF8"));
+            System.out.println("Digital signature for given text: " + new String(realSig, "UTF8"));
 
             // Thêm vào db
-            SignedDocumentDAO.InsertData(ConnectDB.CreateConnection(), new SignedDocument(1, realSig.toString()));
+            SignedDocumentDAO.InsertData(ConnectDB.CreateConnection(), new SignedDocument(1, realSig));
 
             /*Save the Signature and the Public Key in Files*/
             FileOutputStream sigfos = new FileOutputStream("sig");

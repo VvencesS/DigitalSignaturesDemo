@@ -31,27 +31,24 @@ public class VerifyingADigitalSignature {
             byte[] sigToVerify = new byte[sigfis.available()];
             sigfis.read(sigToVerify);
             sigfis.close();
-//            SignedDocument signedDocument = SignedDocumentDAO.getData(ConnectDB.CreateConnection());
+            SignedDocument signedDocument = SignedDocumentDAO.getData(ConnectDB.CreateConnection());
 
             /* Verify the Signature */
             // Initialize the Signature Object for Verification
             Signature sig = Signature.getInstance("SHA1withDSA", "SUN");
             sig.initVerify(pubKey);
 
-            MessageDigest md = MessageDigest.getInstance("SHA-256"); //SHA, MD2, MD5, SHA-256, SHA-384...
-            String hex = Hash.checksum("./wireTransfer103.xml", md);
+            // Chuyển từ Object sang Xml và hash xml đó; đo thời gian hash
+            final long startTime = System.currentTimeMillis();
+            String hex = Hash.hashString(ObjectToXml.jaxbObjectToXML());
+            final long endTime = System.currentTimeMillis();
+            System.out.println("Execute hash string time: " + (endTime-startTime));
             sig.update(hex.getBytes());
 
             // Verify the Signature
-            boolean verifies = sig.verify(sigToVerify);
+            boolean verifies = sig.verify(signedDocument.getSignate());
 
             System.out.println("signature verifies: " + verifies);
-
-            final long startTime = System.currentTimeMillis();
-//            String hash = hashString("Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello");
-            String hash = Hash.checksum("./wireTransfer103.xml", MessageDigest.getInstance("SHA-256"));
-            final long endTime = System.currentTimeMillis();
-            System.out.println("Hash string: " + hash + "\nExecute time: " + (endTime-startTime));
         } catch (Exception e) {
             System.err.println("Caught exception " + e.toString());
         }

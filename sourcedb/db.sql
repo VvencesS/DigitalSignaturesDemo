@@ -24,11 +24,12 @@ DROP TABLE IF EXISTS `signedocument`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `signedocument` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `document` int NOT NULL,
-  `signature` varchar(255) NOT NULL,
+  `document` int DEFAULT NULL,
+  `signature` blob,
   PRIMARY KEY (`id`),
-  CONSTRAINT `fk_signeddocument_wiretransfer103` FOREIGN KEY (`id`) REFERENCES `wire_transfer_103` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  KEY `fk_signedocument_wiretransfer103_idx` (`document`),
+  CONSTRAINT `fk_signedocument_wiretransfer103` FOREIGN KEY (`document`) REFERENCES `wire_transfer_103` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -37,7 +38,6 @@ CREATE TABLE `signedocument` (
 
 LOCK TABLES `signedocument` WRITE;
 /*!40000 ALTER TABLE `signedocument` DISABLE KEYS */;
-INSERT INTO `signedocument` VALUES (1,1,'[B@7a9273a8');
 /*!40000 ALTER TABLE `signedocument` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -102,4 +102,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-02-09 20:39:48
+-- Dump completed on 2021-02-17 16:24:30
